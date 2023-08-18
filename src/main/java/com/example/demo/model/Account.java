@@ -1,0 +1,84 @@
+package com.example.demo.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.CascadeType;
+
+
+import com.example.demo.repository.LoginRepository;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+//import org.hibernate.annotations.Columns;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Table(name = "account")
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
+@ToString
+
+public class Account {
+	@Id
+	@Column(name="account_no")
+	private long account_no;
+	@Column(name="title")
+	private String title;
+	@Column(name="first_name")
+	private String firstname;
+	@Column(name="middle_name")
+	private String middlename;
+	@Column(name="last_name")
+	private String lastname;
+	@Column(name="father_name")
+	private String fathersname;
+	@Column(name="mobile_number")
+	private long mobilenumber;
+	@Column(name="aadhar_number")
+	private long aadharnumber;
+	@Column(name="dob")
+	private String dob;
+	@Column(name="transaction_pin")
+	private int transactionpin;
+	@Column(name="balance")
+	private long balance;
+	@Column(name="occupation_type")
+	private String occupationtype;
+	@Column (name="source_of_income")
+	private String sourceofincome;
+	@Column(name="annual_income")
+	private long annualincome;
+	@Column(name="account_type")
+	private String accounttype;
+	@Column(name="residential_address")
+	private String residentialAddress;
+	@Column(name="permanent_address")
+	private String permanentAddress;
+	
+	
+	
+//	@JsonProperty("userid")
+	@JsonBackReference
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "user_id")
+	private Login login;
+	
+	
+}
