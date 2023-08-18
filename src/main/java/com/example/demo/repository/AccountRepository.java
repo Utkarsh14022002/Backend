@@ -10,8 +10,5 @@ import com.example.demo.model.Login;
 
 public interface AccountRepository extends JpaRepository<Account,Long> {
 	
-	@Query
-	public void createNewAccount(@RequestBody Account account);
-
 	
 }
