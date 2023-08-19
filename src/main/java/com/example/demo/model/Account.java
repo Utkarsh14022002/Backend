@@ -80,5 +80,9 @@ public class Account {
 	@JoinColumn(name = "user_id")
 	private Login login;
 	
+	public void setUserIdFromLogin(Login user) {
+		this.login=user;
+	}
+	
 	
 }
