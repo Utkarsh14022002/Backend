@@ -33,7 +33,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Setter
 @Getter
-//@ToString
+@ToString
 
 public class Account {
 	@Id
@@ -73,15 +73,15 @@ public class Account {
 	private String permanentAddress;
 	
 
-	@Override
-	public String toString() {
-		return "Account [accountNo=" + accountNo + ", title=" + title + ", firstname=" + firstname + ", middlename="
-				+ middlename + ", lastname=" + lastname + ", fathersname=" + fathersname + ", mobilenumber="
-				+ mobilenumber + ", aadharnumber=" + aadharnumber + ", dob=" + dob + ", transactionpin="
-				+ transactionpin + ", balance=" + balance + ", occupationtype=" + occupationtype + ", sourceofincome="
-				+ sourceofincome + ", annualincome=" + annualincome + ", accounttype=" + accounttype
-				+ ", residentialAddress=" + residentialAddress + ", permanentAddress=" + permanentAddress + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Account [accountNo=" + accountNo + ", title=" + title + ", firstname=" + firstname + ", middlename="
+//				+ middlename + ", lastname=" + lastname + ", fathersname=" + fathersname + ", mobilenumber="
+//				+ mobilenumber + ", aadharnumber=" + aadharnumber + ", dob=" + dob + ", transactionpin="
+//				+ transactionpin + ", balance=" + balance + ", occupationtype=" + occupationtype + ", sourceofincome="
+//				+ sourceofincome + ", annualincome=" + annualincome + ", accounttype=" + accounttype
+//				+ ", residentialAddress=" + residentialAddress + ", permanentAddress=" + permanentAddress + "]";
+//	}
 	
 
 	@JsonBackReference
