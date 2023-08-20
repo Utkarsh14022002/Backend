@@ -32,25 +32,16 @@ public class Login {
     private int admin;
     @Column(name="email")
     private String emailid;
+    
+    
+	@Override
+	public String toString() {
+		return "Login [userid=" + userid + ", password=" + password + ", admin=" + admin + ", emailid=" + emailid + "]";
+	}
 
+    
     @JsonManagedReference
-    @OneToMany(mappedBy = "login",
-    		cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @OneToMany(mappedBy = "login", cascade = CascadeType.ALL)
     private List<Account> account;
 
-//    public Login(String userid) {
-//    	this.userid=userid;
-////    	this.emailid=emailid;
-//    }
-    
-    @Override
-    public String toString() {
-        return "Login{" +
-                "userid='" + userid + '\'' +
-                ", password='" + password + '\'' +
-                ", admin=" + admin + '\'' +
-                ", emailid=" + emailid +
-                // Exclude 'account' property in toString()
-                '}';
-    }
 }

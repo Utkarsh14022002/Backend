@@ -33,12 +33,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString
+//@ToString
 
 public class Account {
 	@Id
 	@Column(name="account_no")
-	private long account_no;
+	private long accountNo;
 	@Column(name="title")
 	private String title;
 	@Column(name="first_name")
@@ -72,17 +72,29 @@ public class Account {
 	@Column(name="permanent_address")
 	private String permanentAddress;
 	
+
+	@Override
+	public String toString() {
+		return "Account [accountNo=" + accountNo + ", title=" + title + ", firstname=" + firstname + ", middlename="
+				+ middlename + ", lastname=" + lastname + ", fathersname=" + fathersname + ", mobilenumber="
+				+ mobilenumber + ", aadharnumber=" + aadharnumber + ", dob=" + dob + ", transactionpin="
+				+ transactionpin + ", balance=" + balance + ", occupationtype=" + occupationtype + ", sourceofincome="
+				+ sourceofincome + ", annualincome=" + annualincome + ", accounttype=" + accounttype
+				+ ", residentialAddress=" + residentialAddress + ", permanentAddress=" + permanentAddress + "]";
+	}
 	
-	
-//	@JsonProperty("userid")
+
 	@JsonBackReference
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private Login login;
 	
 	public void setUserIdFromLogin(Login user) {
 		this.login=user;
 	}
+
+
+
 	
 	
 }
