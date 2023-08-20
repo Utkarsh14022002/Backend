@@ -83,7 +83,12 @@ public class Account {
 //				+ ", residentialAddress=" + residentialAddress + ", permanentAddress=" + permanentAddress + "]";
 //	}
 	
+<<<<<<< HEAD
+	//s
+//	@JsonProperty("userid")
+=======
 
+>>>>>>> 840362a4bf3859d9496c228f743400cd8b4c295d
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
