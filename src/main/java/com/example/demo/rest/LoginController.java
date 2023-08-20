@@ -148,65 +148,7 @@ public class LoginController {
         }
     }
     
-
-    
-//    @PostMapping("/verify-otp")
-//    public ResponseEntity<Map<String, String>> verifyOTP(@RequestBody Map<String, String> request) {
-//        String email = request.get("emailid");
-//        String enteredOTP = request.get("otp");
-//
-//        // Retrieve the previously generated OTP from your backend or database
-//        String generatedOTP = perotp; // Replace with your actual logic
-//
-//        if (enteredOTP.equals(generatedOTP)) {
-//            // Return success response
-//            Map<String, String> response = new HashMap<>();
-//            response.put("message", "OTP verified successfully");
-//            return ResponseEntity.ok(response);
-//        } else {
-//            // Return failure response
-//            Map<String, String> response = new HashMap<>();
-//            response.put("message", "OTP verification failed");
-//            return ResponseEntity.badRequest().body(response);
-//        }
-//    }
-
-//    @PostMapping("/get-userid")
-//    public ResponseEntity<String> getUserId(@RequestBody Map<String, String> request) {
-//        String email = request.get("emailid");
-//
-//        Optional<Login> existingLoginOptional = loginRepository.findByEmailid(email);
-//
-//        if (existingLoginOptional.isPresent()) {
-//            Login existingLogin = existingLoginOptional.get();
-//            String userId = existingLogin.getUserid();
-//            return ResponseEntity.ok(userId);
-//        } else {
-//            return ResponseEntity.badRequest().body("Email not found");
-//        }
-//    }
-
-
-    
-    
-//    @PutMapping("/update-userid")
-//    public ResponseEntity<String> updateUserId(@RequestBody Map<String, String> request) {
-//        String email = request.get("emailid");
-//        String newUserId = request.get("newUserId");
-//
-//        Optional<Login> existingLoginOptional = loginRepository.findByEmailid(email);
-//
-//        if (existingLoginOptional.isPresent()) {
-//            Login login = existingLoginOptional.get();
-//            login.setUserid(newUserId);
-//            loginRepository.save(login);
-//            return ResponseEntity.ok("User ID updated successfully");
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-   
+  
 
     @GetMapping("/{userid}")
     public ResponseEntity<Login> validateUserId(@PathVariable("userid") String userid) {
