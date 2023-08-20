@@ -80,7 +80,6 @@ public class LoginController {
     public ResponseEntity<Optional<Login>> validateUserid(@PathVariable("userId") String userId) {
         Optional<Login> user = loginRepository.findByUserid(userId);
         if (user.isPresent()) {
-//            Login usercur = user.get();
             return new ResponseEntity<>(user,HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
