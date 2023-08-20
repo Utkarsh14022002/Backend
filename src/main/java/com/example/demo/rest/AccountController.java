@@ -41,19 +41,19 @@ public class AccountController {
 		return account;
 	}
 	
-//	@PostMapping("/{userId}") 
-//	public ResponseEntity<String> addAccountForUserId(@PathVariable String userId,@RequestBody Account account){
-//		Optional<Login> userOptional = loginRepository.findByUserid(userId);
-//		if (userOptional.isPresent()) {
-//			Login user = userOptional.get();
-//			account.setUserIdFromLogin(user);
-//			accountRepository.save(account);
-//			return ResponseEntity.ok("Account added successfully");
-//		}else {
-//			return ResponseEntity.notFound().build();
-//			
-//		}
-//	}
+	@PostMapping("/{userId}") 
+	public ResponseEntity<String> addAccountForUserId(@PathVariable String userId,@RequestBody Account account){
+		Optional<Login> userOptional = loginRepository.findByUserid(userId);
+		if (userOptional.isPresent()) {
+			Login user = userOptional.get();
+			account.setUserIdFromLogin(user);
+			accountRepository.save(account);
+			return ResponseEntity.ok("Account added successfully");
+		}else {
+			return ResponseEntity.notFound().build();
+			
+		}
+	}
 	
 	@GetMapping("/{accountNo}")
 	public ResponseEntity<Optional<Account>> findAccountByAccountNo(@PathVariable("accountNo") long accountNo) {

@@ -73,22 +73,9 @@ public class Account {
 	private String permanentAddress;
 	
 
-//	@Override
-//	public String toString() {
-//		return "Account [accountNo=" + accountNo + ", title=" + title + ", firstname=" + firstname + ", middlename="
-//				+ middlename + ", lastname=" + lastname + ", fathersname=" + fathersname + ", mobilenumber="
-//				+ mobilenumber + ", aadharnumber=" + aadharnumber + ", dob=" + dob + ", transactionpin="
-//				+ transactionpin + ", balance=" + balance + ", occupationtype=" + occupationtype + ", sourceofincome="
-//				+ sourceofincome + ", annualincome=" + annualincome + ", accounttype=" + accounttype
-//				+ ", residentialAddress=" + residentialAddress + ", permanentAddress=" + permanentAddress + "]";
-//	}
-	
-<<<<<<< HEAD
-	//s
-//	@JsonProperty("userid")
-=======
 
->>>>>>> 840362a4bf3859d9496c228f743400cd8b4c295d
+	
+
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
