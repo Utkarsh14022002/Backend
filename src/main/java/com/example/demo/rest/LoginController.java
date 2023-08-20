@@ -1,14 +1,11 @@
 package com.example.demo.rest;
 
-import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,7 +20,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.example.demo.model.Login;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.LoginRepository;
-import com.example.demo.model.Account;
 @EnableWebMvc
 @RestController
 @RequestMapping("/logins")
@@ -79,31 +75,15 @@ public class LoginController {
     }
     
     
-//    @GetMapping("/user/{userid}")
-//    	public ResponseEntity<String> validateUserid(@PathVariable String userid) {
-//        	Optional<Login> user = loginRepository.findByUserid(userid);
-//  
-//        	if (user.isPresent()) {
-//        		return ResponseEntity.ok("User ID is valid");
-//        	} else {
-//        		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid User ID");
-//        	}
-//    	}
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Map<String, String>> validateUserid(@PathVariable String userId) {
+    public ResponseEntity<Optional<Login>> validateUserid(@PathVariable("userId") String userId) {
         Optional<Login> user = loginRepository.findByUserid(userId);
         if (user.isPresent()) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "User ID is valid");
-            response.put("userId", user.get().getUserid());
-            response.put("password", user.get().getPassword());
-            response.put("email", user.get().getEmailid());
-            return ResponseEntity.ok(response);
+//            Login usercur = user.get();
+            return new ResponseEntity<>(user,HttpStatus.OK);
         } else {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Invalid User ID");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -168,6 +148,7 @@ public class LoginController {
         }
     }
     
+
     
 //    @PostMapping("/verify-otp")
 //    public ResponseEntity<Map<String, String>> verifyOTP(@RequestBody Map<String, String> request) {
@@ -225,8 +206,7 @@ public class LoginController {
 //        }
 //    }
 
-
-    
+   
 
     @GetMapping("/{userid}")
     public ResponseEntity<Login> validateUserId(@PathVariable("userid") String userid) {
@@ -248,57 +228,3 @@ public class LoginController {
 }
 
 
-
-
-
-
-//public class LoginController {
-//	private LoginRepository loginRepository;
-//	
-//	public LoginController(LoginRepository loginRepository) {
-//		super();
-//		this.loginRepository = loginRepository;
-//
-//	}
-//	
-////	@PostMapping
-////	public ResponseEntity<Login> createLogin(@RequestBody Login login) {
-////		Login i = loginRepository.save(login);
-////		return new ResponseEntity<Login>(i, HttpStatus.CREATED);
-////	}
-////	
-//	
-//
-//	@PostMapping
-//	public ResponseEntity<Login> createLogin(@RequestBody Login login) {
-//	    Optional<Login> existingLoginOptional = loginRepository.findByUserid(login.getUserid());
-//
-//	    if (existingLoginOptional.isPresent()) {
-//	        return ResponseEntity.badRequest().body(existingLoginOptional.get());
-//	    }
-//
-//	    Login i = loginRepository.save(login);
-//	    return new ResponseEntity<Login>(i, HttpStatus.CREATED);
-//	}
-//
-//	
-//	@GetMapping("/{userid}")
-//	public ResponseEntity<Login> validateUserId(@PathVariable("userid") String userid) {
-//	    Optional<Login> existingLoginOptional = loginRepository.findByUserid(userid);
-//	    
-//	    if (existingLoginOptional.isPresent()) {
-//	        return ResponseEntity.ok(existingLoginOptional.get());
-//	    } else {
-//	        return ResponseEntity.notFound().build();
-//	    }
-//	}
-//	
-////	@GetMapping("/{userid}")
-////	public ResponseEntity<Optional<Login>> findLoginByUserid(@PathVariable("userid") String userid) {
-////
-////		Optional<Login> inOptional=loginRepository.findByUserid(userid);
-////		System.out.println(inOptional);
-////		return ResponseEntity.ok(inOptional);
-////	}
-//
-//}

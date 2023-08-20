@@ -1,5 +1,7 @@
 package com.example.demo.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,11 @@ public class AccountController {
 		}
 	}
 	
+	@GetMapping("/user/{userId}")
+	public List<Account> getAccountsByUserId(@PathVariable("userId") String userId){
+		return accountRepository.findByLoginUserid(userId);
+	}
+	
 	@GetMapping("/{accountNo}")
 	public ResponseEntity<Optional<Account>> findAccountByAccountNo(@PathVariable("accountNo") long accountNo) {
 
@@ -66,13 +73,9 @@ public class AccountController {
         Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
         if (existingAccountOptional.isPresent()) {
             Account existingAccount = existingAccountOptional.get();
-//            existingAccount.setAccountNo(updatedAccount.getAccountNo());
-//            existingAccount.setAadharnumber(updatedAccount.getAadharnumber());
-            existingAccount.setTransactionpin(updatedAccount.getTransactionpin());
-//            existingLogin.setPassword(updatedLogin.getPassword());
-//            existingLogin.setAdmin(updatedLogin.getAdmin());
-//            existingLogin.setEmail(updatedLogin.getEmail());
 
+            existingAccount.setTransactionpin(updatedAccount.getTransactionpin());
+            
             Account updated = accountRepository.save(existingAccount);
             return new ResponseEntity<>(updated, HttpStatus.OK);
         } else {
