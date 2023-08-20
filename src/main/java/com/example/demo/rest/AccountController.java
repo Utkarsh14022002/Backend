@@ -1,5 +1,7 @@
 package com.example.demo.rest;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.example.demo.model.Account;
+import com.example.demo.model.Login;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.LoginRepository;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
-import com.example.demo.model.Login;
 @EnableWebMvc
 @RestController
 @RequestMapping("/accounts")
@@ -64,21 +61,24 @@ public class AccountController {
 	}
 	
 	
-//	@PutMapping("/{userId}")
-//    public ResponseEntity<Login> updateLogin(@PathVariable("userId") String userId, @RequestBody Login updatedLogin) {
-//        Optional<Login> existingLoginOptional = loginRepository.findByUserId(userId);
-//        if (existingLoginOptional.isPresent()) {
-//            Login existingLogin = existingLoginOptional.get();
+	@PutMapping("/{accountNo}")
+    public ResponseEntity<Account> updateAccunt(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount) {
+        Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
+        if (existingAccountOptional.isPresent()) {
+            Account existingAccount = existingAccountOptional.get();
+//            existingAccount.setAccountNo(updatedAccount.getAccountNo());
+//            existingAccount.setAadharnumber(updatedAccount.getAadharnumber());
+            existingAccount.setTransactionpin(updatedAccount.getTransactionpin());
 //            existingLogin.setPassword(updatedLogin.getPassword());
 //            existingLogin.setAdmin(updatedLogin.getAdmin());
 //            existingLogin.setEmail(updatedLogin.getEmail());
-//
-//            Login updated = loginRepository.save(existingLogin);
-//            return new ResponseEntity<>(updated, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+
+            Account updated = accountRepository.save(existingAccount);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 	
     
 
