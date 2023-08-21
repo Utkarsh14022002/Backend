@@ -11,9 +11,11 @@ import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 
-
+import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.LoginRepository;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -92,6 +94,10 @@ public class Account {
 	
 	public void setUserIdFromLogin(Login user) {
 		this.login=user;
+	}
+	
+	public List<Account> findByUser(Login user,AccountRepository accountRepository){
+		return accountRepository.findByLogin(user);
 	}
 
 
