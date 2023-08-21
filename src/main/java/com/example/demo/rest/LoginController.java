@@ -163,7 +163,23 @@ public class LoginController {
     	}
     	
     }
-
+    
+    
+    @PutMapping("/{email}")
+    public ResponseEntity<String> updateNewPassword(@PathVariable("email") String emailid, @RequestBody Map<String,String> request){
+    	String newPassword = request.get("newPassword");
+    	Optional <Login>optionalUser = loginRepository.findByEmailid(emailid);
+    	if(optionalUser.isPresent()) {
+    		Login user = optionalUser.get();
+    		user.setPassword(newPassword);
+    		loginRepository.save(user);
+    		return ResponseEntity.ok("success");
+    	}else {
+    		return ResponseEntity.notFound().build();
+    	}
+    	
+    }
+    
     @GetMapping("/{userid}")
     public ResponseEntity<Login> validateUserId(@PathVariable("userid") String userid) {
         Optional<Login> existingLoginOptional = loginRepository.findByUserid(userid);
