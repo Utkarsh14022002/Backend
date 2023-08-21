@@ -149,7 +149,8 @@ public class LoginController {
     }
     
     @PutMapping("/updatePassword/{userid}")
-    public ResponseEntity<String> updatePassword(@PathVariable("userid") String userId, @RequestBody String newPassword){
+    public ResponseEntity<String> updatePassword(@PathVariable("userid") String userId, @RequestBody Map<String,String> request){
+    	String newPassword = request.get("newPassword");
     	Optional <Login>optionalUser = loginRepository.findByUserid(userId);
     	if(optionalUser.isPresent()) {
     		Login user = optionalUser.get();

@@ -12,10 +12,10 @@ spring:
       ddl-auto: update
     show-sql: true
   mail:
-    host: smtp.ethereal.email
+    host: smtp.gmail.com
     port: 587
-    username: elsie.monahan@ethereal.email
-    password: baebPfaxqqybS569kj
+    username: saumyshrey@gmail.com
+    password: sucmllywcopxdsbx
     properties:
       mail:
         smtp:
