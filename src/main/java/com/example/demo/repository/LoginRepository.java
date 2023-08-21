@@ -11,4 +11,5 @@ public interface LoginRepository extends JpaRepository<Login,String> {
 	public Optional<Login> findByUserid(String userid);
 	@Query
 	public Optional<Login> findByEmailid(String emailid);
+	
 }
