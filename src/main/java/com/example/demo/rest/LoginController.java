@@ -1,9 +1,12 @@
 package com.example.demo.rest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.example.demo.model.Login;
+import com.example.demo.model.Account;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.LoginRepository;
 @EnableWebMvc
@@ -162,7 +166,50 @@ public class LoginController {
     	}
     	
     }
-
+    
+    
+    @PutMapping("/{email}")
+    public ResponseEntity<String> updateNewPassword(@PathVariable("email") String emailid, @RequestBody Map<String,String> request){
+    	String newPassword = request.get("newPassword");
+    	Optional <Login>optionalUser = loginRepository.findByEmailid(emailid);
+    	if(optionalUser.isPresent()) {
+    		Login user = optionalUser.get();
+    		user.setPassword(newPassword);
+    		loginRepository.save(user);
+    		return ResponseEntity.ok("success");
+    	}else {
+    		return ResponseEntity.notFound().build();
+    	}
+    	
+    }
+    
+//    @Transactional
+//    @PutMapping("/forgetuserid/{email}")
+//    public ResponseEntity<String> updateNewUserID(@PathVariable("email") String emailid, @RequestBody Map<String,String> request){
+//    	String newUser = request.get("newUser");
+//    	Optional <Login>optionalUser = loginRepository.findByEmailid(emailid);
+//    	if(optionalUser.isPresent()) {
+//    		Login user = optionalUser.get();
+//    		List<Account> accountWithOldUser = accountRepository.findByLogin(user);
+//    		System.out.println(user);
+//    		user.setUserid(newUser);
+//    		System.out.println(user);
+//    		loginRepository.save(user);
+//    		
+//    		
+//    		for (Account account : accountWithOldUser) {
+//    			System.out.println(account);
+//    			account.setUserIdFromLogin(user);
+//    			accountRepository.save(account);
+//    			
+//    		}
+//    		return ResponseEntity.ok("success");
+//    	}else {
+//    		return ResponseEntity.notFound().build();
+//    	}
+//    	
+//    }
+    
     @GetMapping("/{userid}")
     public ResponseEntity<Login> validateUserId(@PathVariable("userid") String userid) {
         Optional<Login> existingLoginOptional = loginRepository.findByUserid(userid);
