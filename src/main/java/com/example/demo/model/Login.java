@@ -16,7 +16,7 @@ import lombok.ToString;
 
 
 @Entity
-@Table(name = "login")
+@Table(name = "login",uniqueConstraints=@UniqueConstraint(columnNames= {"email"}))
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

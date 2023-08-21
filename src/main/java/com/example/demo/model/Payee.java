@@ -34,6 +34,7 @@ public class Payee {
 	private String payeename;
 	@Column(name="nickname")
 	private String nickname;
+	
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "parent_account_no")
