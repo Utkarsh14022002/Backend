@@ -1,5 +1,7 @@
 package com.example.demo.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,11 @@ public class AccountController {
 			return ResponseEntity.notFound().build();
 			
 		}
+	}
+	
+	@GetMapping("/user/{userId}")
+	public List<Account> getAccountsByUserId(@PathVariable("userId") String userId){
+		return accountRepository.findByLoginUserid(userId);
 	}
 	
 	@GetMapping("/{accountNo}")

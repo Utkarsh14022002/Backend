@@ -74,6 +74,15 @@ public class Account {
 	
 
 
+	@Override
+	public String toString() {
+		return "Account [accountNo=" + accountNo + ", title=" + title + ", firstname=" + firstname + ", middlename="
+				+ middlename + ", lastname=" + lastname + ", fathersname=" + fathersname + ", mobilenumber="
+				+ mobilenumber + ", aadharnumber=" + aadharnumber + ", dob=" + dob + ", transactionpin="
+				+ transactionpin + ", balance=" + balance + ", occupationtype=" + occupationtype + ", sourceofincome="
+				+ sourceofincome + ", annualincome=" + annualincome + ", accounttype=" + accounttype
+				+ ", residentialAddress=" + residentialAddress + ", permanentAddress=" + permanentAddress + "]";
+	}
 	
 
 	@JsonBackReference

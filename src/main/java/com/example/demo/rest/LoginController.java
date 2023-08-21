@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -147,7 +148,19 @@ public class LoginController {
         }
     }
     
- 
+    @PutMapping("/updatePassword/{userid}")
+    public ResponseEntity<String> updatePassword(@PathVariable("userid") String userId, @RequestBody String newPassword){
+    	Optional <Login>optionalUser = loginRepository.findByUserid(userId);
+    	if(optionalUser.isPresent()) {
+    		Login user = optionalUser.get();
+    		user.setPassword(newPassword);
+    		loginRepository.save(user);
+    		return ResponseEntity.ok("success");
+    	}else {
+    		return ResponseEntity.notFound().build();
+    	}
+    	
+    }
 
     @GetMapping("/{userid}")
     public ResponseEntity<Login> validateUserId(@PathVariable("userid") String userid) {
