@@ -7,9 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import javax.persistence.CascadeType;
 
@@ -17,6 +20,7 @@ import javax.persistence.CascadeType;
 import com.example.demo.repository.LoginRepository;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 //import org.hibernate.annotations.Columns;
@@ -93,6 +97,10 @@ public class Account {
 	public void setUserIdFromLogin(Login user) {
 		this.login=user;
 	}
+	
+	@JsonManagedReference
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+	private List<Payee> payee;
 
 
 
