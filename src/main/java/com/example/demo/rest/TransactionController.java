@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Account;
-import com.example.demo.model.Payee;
 import com.example.demo.model.Transaction;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.TransactionRepository;
@@ -37,13 +36,21 @@ public class TransactionController {
 
 	}
 	
+	@GetMapping("/{from_acc_no}/totalcount")
+	public long getNoOfTotalTransactions(@PathVariable("from_acc_no") long from_acc_no){
+		List<Transaction> transaction = transactionRepository.findLatestTransactions(from_acc_no);
+		return transaction.size();
+
+	}
+	
 	@GetMapping("/{from_acc_no}/between-dates")
 	public List<Transaction> getTransactionBetweenDates(
 			@PathVariable("from_acc_no") long from_acc_no,
 			@RequestParam String from_date,
 			@RequestParam String to_date){
-		List<Transaction> transactions =transactionRepository.findTransactionBetweenDates(from_acc_no, from_date, to_date);
-		return transactions;
+		List<Transaction> transaction =transactionRepository.findTransactionBetweenDates(from_acc_no, from_date, to_date);
+		System.out.println(transaction);
+		return transaction;
 	}
 	
 //	@PostMapping
