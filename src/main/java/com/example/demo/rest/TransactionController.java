@@ -37,6 +37,15 @@ public class TransactionController {
 
 	}
 	
+	@GetMapping("/{from_acc_no}/between-dates")
+	public List<Transaction> getTransactionBetweenDates(
+			@PathVariable("from_acc_no") long from_acc_no,
+			@RequestParam String from_date,
+			@RequestParam String to_date){
+		List<Transaction> transactions =transactionRepository.findTransactionBetweenDates(from_acc_no, from_date, to_date);
+		return transactions;
+	}
+	
 //	@PostMapping
 //	public Transaction createLogin(@RequestBody Transaction transaction)
 //	{
