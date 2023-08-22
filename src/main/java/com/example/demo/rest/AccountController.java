@@ -69,13 +69,27 @@ public class AccountController {
 	
 	
 	@PutMapping("/{accountNo}")
-    public ResponseEntity<Account> updateAccunt(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount) {
+    public ResponseEntity<Account> updateAccountPin(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount) {
         Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
         if (existingAccountOptional.isPresent()) {
             Account existingAccount = existingAccountOptional.get();
             System.out.println(updatedAccount.getBalance());
             existingAccount.setBalance(updatedAccount.getBalance());
             System.out.println(existingAccount);
+            Account updated = accountRepository.save(existingAccount);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+	@PutMapping("/accbalance/{accountNo}")
+    public ResponseEntity<Account> updateAcocuntBalance(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount) {
+        Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
+        if (existingAccountOptional.isPresent()) {
+            Account existingAccount = existingAccountOptional.get();
+
+            existingAccount.setBalance(updatedAccount.getBalance());
+            
             Account updated = accountRepository.save(existingAccount);
             return new ResponseEntity<>(updated, HttpStatus.OK);
         } else {
