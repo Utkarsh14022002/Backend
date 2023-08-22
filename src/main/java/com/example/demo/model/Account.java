@@ -106,6 +106,10 @@ public class Account {
 	@JsonManagedReference
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 	private List<Payee> payee;
+	
+	@JsonManagedReference
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+	private List<Transaction> transaction;
 
 
 
