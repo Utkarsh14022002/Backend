@@ -73,9 +73,9 @@ public class AccountController {
         Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
         if (existingAccountOptional.isPresent()) {
             Account existingAccount = existingAccountOptional.get();
-
-            existingAccount.setTransactionpin(updatedAccount.getTransactionpin());
-            
+            System.out.println(updatedAccount.getBalance());
+            existingAccount.setBalance(updatedAccount.getBalance());
+            System.out.println(existingAccount);
             Account updated = accountRepository.save(existingAccount);
             return new ResponseEntity<>(updated, HttpStatus.OK);
         } else {
