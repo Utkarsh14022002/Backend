@@ -44,52 +44,52 @@ public class Account {
 	@Id
 	@Column(name="account_no")
 	private long accountNo;
-	@NotNull
+	@NotNull(message="Title may not be null")
 	@Column(name="title")
 	private String title;
-	@NotNull
+	@NotNull(message="First name may not be null")
 	@Column(name="first_name")
 	private String firstname;
 	
 	@Column(name="middle_name")
 	private String middlename;
 	
-	@NotNull
+	@NotNull(message="Last name may not be null")
 	@Column(name="last_name")
 	private String lastname;
-	@NotNull
+	@NotNull(message="Father's name may not be null")
 	@Column(name="father_name")
 	private String fathersname;
-	@NotNull
+	@NotNull(message="Mobile Number may not be null")
 	@Column(name="mobile_number")
 	private long mobilenumber;
-	@NotNull
+	@NotNull(message="Aadhar Number  may not be null")
 	@Column(name="aadhar_number")
 	private long aadharnumber;
-	@NotNull
+	@NotNull(message="Date of Birth may not be null")
 	@Column(name="dob")
 	private String dob;
 	@Column(name="transaction_pin")
 	private int transactionpin;
-	@NotNull
+	@NotNull(message="Balance may not be null")
 	@Column(name="balance")
 	private long balance;
-	@NotNull
+	@NotNull(message="Occupation type may not be null")
 	@Column(name="occupation_type")
 	private String occupationtype;
-	@NotNull
+	@NotNull(message="Source of income may not be null")
 	@Column (name="source_of_income")
 	private String sourceofincome;
-	@NotNull
+	@NotNull(message="Annual income  may not be null")
 	@Column(name="annual_income")
 	private long annualincome;
-	@NotNull
+	@NotNull(message="Account type may not be null")
 	@Column(name="account_type")
 	private String accounttype;
-	@NotNull
+	@NotNull(message="Residential address may not be null")
 	@Column(name="residential_address")
 	private String residentialAddress;
-	@NotNull
+	@NotNull(message="Permanent address may not be null")
 	@Column(name="permanent_address")
 	private String permanentAddress;
 	
