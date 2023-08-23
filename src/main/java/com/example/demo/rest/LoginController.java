@@ -210,6 +210,11 @@ public class LoginController {
 //    	
 //    }
     
+    @GetMapping("/users")
+    public List<Login> validateUserId(){
+    	return loginRepository.findAll();
+    }
+    
     @GetMapping("/{userid}")
     public ResponseEntity<Login> validateUserId(@PathVariable("userid") String userid) {
         Optional<Login> existingLoginOptional = loginRepository.findByUserid(userid);
