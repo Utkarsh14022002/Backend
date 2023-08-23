@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 
@@ -26,10 +28,15 @@ public class Login {
     @Id
     @Column(name = "user_id")
     private String userid;
+    
+    @NotNull
     @Column(name = "password")
     private String password;
+    @NotNull
     @Column(name = "isadmin")
     private int admin;
+    
+    @NotNull
     @Column(name="email")
     private String emailid;
     
