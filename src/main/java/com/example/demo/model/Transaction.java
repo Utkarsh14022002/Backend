@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -33,14 +34,22 @@ public class Transaction {
 	@Id
 	@Column(name="transaction_id")
 	private long transactionid;
+	
+	@NotNull(message="Receiver's account number may not be null")
 	@Column(name="to_acc_no")
 	private long toaccno;
+	
+	@NotNull(message="Amount may not be null")
 	@Column(name="amount")
 	private long amount;
+	
+	@NotNull(message="Date may not be null")
 	@Column(name="date")
 	private String date;
 	@Column(name="remarks")
 	private String remarks;
+	
+	@NotNull(message="Mode may not be null")
 	@Column(name="mode")
 	private String mode;
 	

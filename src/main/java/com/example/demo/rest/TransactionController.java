@@ -30,6 +30,7 @@ public class TransactionController {
 	private AccountRepository accountRepository;
 	
 	@GetMapping("/{from_acc_no}")
+//	Get all the transactions for a given account number 
 	public List<Transaction> getLatestTransactions(@PathVariable("from_acc_no") long from_acc_no,@RequestParam int n){
 		List<Transaction> transaction = transactionRepository.findLatestTransactions(from_acc_no);
 		return transaction.subList(0,Math.min(n, transaction.size()));
