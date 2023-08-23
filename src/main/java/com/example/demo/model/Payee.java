@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -30,8 +31,11 @@ public class Payee {
 	@Id
 	@Column( name="payee_account_id")
 	private long payeeaccountno;
+	
+	@NotNull
 	@Column( name="payee_name")
 	private String payeename;
+	@NotNull
 	@Column(name="nickname")
 	private String nickname;
 	

@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,36 +44,52 @@ public class Account {
 	@Id
 	@Column(name="account_no")
 	private long accountNo;
+	@NotNull
 	@Column(name="title")
 	private String title;
+	@NotNull
 	@Column(name="first_name")
 	private String firstname;
+	
 	@Column(name="middle_name")
 	private String middlename;
+	
+	@NotNull
 	@Column(name="last_name")
 	private String lastname;
+	@NotNull
 	@Column(name="father_name")
 	private String fathersname;
+	@NotNull
 	@Column(name="mobile_number")
 	private long mobilenumber;
+	@NotNull
 	@Column(name="aadhar_number")
 	private long aadharnumber;
+	@NotNull
 	@Column(name="dob")
 	private String dob;
 	@Column(name="transaction_pin")
 	private int transactionpin;
+	@NotNull
 	@Column(name="balance")
 	private long balance;
+	@NotNull
 	@Column(name="occupation_type")
 	private String occupationtype;
+	@NotNull
 	@Column (name="source_of_income")
 	private String sourceofincome;
+	@NotNull
 	@Column(name="annual_income")
 	private long annualincome;
+	@NotNull
 	@Column(name="account_type")
 	private String accounttype;
+	@NotNull
 	@Column(name="residential_address")
 	private String residentialAddress;
+	@NotNull
 	@Column(name="permanent_address")
 	private String permanentAddress;
 	
