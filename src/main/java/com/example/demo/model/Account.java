@@ -98,15 +98,15 @@ public class Account {
 		this.login=user;
 	}
 	
-<<<<<<< HEAD
+
 	public List<Account> findByUser(Login user,AccountRepository accountRepository){
 		return accountRepository.findByLogin(user);
 	}
-=======
+
 	@JsonManagedReference
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
 	private List<Payee> payee;
->>>>>>> f30aa1fe7a3286d94b9c7c8f8d1346336e4bab72
+
 
 
 
