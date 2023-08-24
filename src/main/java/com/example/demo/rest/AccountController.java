@@ -7,13 +7,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -21,6 +24,7 @@ import com.example.demo.model.Account;
 import com.example.demo.model.Login;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.LoginRepository;
+import com.example.demo.util.JwtTokenUtil;
 @EnableWebMvc
 @RestController
 @RequestMapping("/accounts")
@@ -32,6 +36,13 @@ public class AccountController {
 	
 	@Autowired
 	private LoginRepository loginRepository;
+	
+	private final JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	public AccountController(JwtTokenUtil jwtTokenUtil) {
+		this.jwtTokenUtil=jwtTokenUtil;
+	}
 	
 	@PostMapping
 	public Account createAccount(@RequestBody Account account)
@@ -59,12 +70,28 @@ public class AccountController {
 		return accountRepository.findByLoginUserid(userId);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/{accountNo}")
-	public ResponseEntity<Optional<Account>> findAccountByAccountNo(@PathVariable("accountNo") long accountNo) {
-
-		Optional<Account> inOptional=accountRepository.findByAccountNo(accountNo);
-		System.out.println(inOptional);
-		return ResponseEntity.ok(inOptional);
+	public ResponseEntity<Account> findAccountByAccountNo(@PathVariable("accountNo") long accountNo, @RequestHeader("Authorization") String header) {
+		String token = header.replace("Bearer ","");
+		String usernameFromToken =jwtTokenUtil.getUsernameFromToken(token);
+		
+		Optional<Account> accountOptional=accountRepository.findByAccountNo(accountNo);
+		if(accountOptional.isPresent()) {
+			Account account =accountOptional.get();
+			Login login = account.getLogin();
+			String userId =login.getUserid();
+			System.out.println(userId);
+			
+			if(usernameFromToken.equals(userId)) {
+				return ResponseEntity.ok(account);
+			}
+			else {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			}
+		}else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	

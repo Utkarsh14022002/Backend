@@ -1,4 +1,5 @@
 package com.example.demo.util;
+import com.example.demo.config.*;
 
 
 
@@ -8,12 +9,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.example.demo.model.Login;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -58,6 +63,22 @@ public class JwtTokenUtil {
 //    }
 
 
+
+    public List<GrantedAuthority> getAuthoritiesFromToken(String token) {
+    	@SuppressWarnings("deprecation")
+		final Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    
+    // Assuming authorities are stored as a JSON array in the token claims
+    	List<String> authorities = claims.get("authorities", List.class);
+    
+    	return authorities.stream()
+    			.map(SimpleGrantedAuthority::new)
+    			.collect(Collectors.toList());
+    }
+
+
+
+    
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
@@ -85,7 +106,7 @@ public class JwtTokenUtil {
 		final Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
         return claimsResolver.apply(claims);
     }
-
+    
 
 //	public String generateToken(Optional<Login> user) {
 //		// TODO Auto-generated method stub

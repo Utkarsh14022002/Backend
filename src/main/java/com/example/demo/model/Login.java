@@ -50,5 +50,13 @@ public class Login {
     @JsonManagedReference
     @OneToMany(mappedBy = "login", cascade = CascadeType.ALL)
     private List<Account> account;
-
+    
+//    @JsonManagedReference
+//    @ManyToMany(mappedBy = "login", cascade = CascadeType.ALL)
+//	private List<Role> role;
+    
+    
+//    @ManyToMany(fetch = FetchType.LAZY)
+//	@JoinTable(name = "login_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "user"))
+//	private List<Role> roles;
 }
