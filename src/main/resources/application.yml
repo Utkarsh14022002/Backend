@@ -1,5 +1,8 @@
 server:
   port: 8081
+jwt:
+ secret: ====================test123===========================
+ expiration: 86400000
 spring:
   application:
     name: banking-service
@@ -22,6 +25,7 @@ spring:
           auth: true
           starttls:
             enable: true
+
     
 
   

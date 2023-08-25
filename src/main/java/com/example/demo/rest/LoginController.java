@@ -22,15 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.example.demo.model.Login;
+//import com.example.demo.model.Role;
+import com.example.demo.model.UserTokenResponse;
 import com.example.demo.model.Account;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.LoginRepository;
+import com.example.demo.util.JwtResponse;
+import com.example.demo.util.JwtTokenUtil;
 @EnableWebMvc
 @RestController
 @RequestMapping("/logins")
 @CrossOrigin(origins="*")
 public class LoginController {
+//	private Role roles;
     private LoginRepository loginRepository;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
     private EmailService emailService; // Inject your EmailService here
     @Autowired
 	private AccountRepository accountRepository;
@@ -43,12 +50,19 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<Login> createLogin(@RequestBody Login login) {
         Optional<Login> existingLoginOptional = loginRepository.findByUserid(login.getUserid());
-
+       
         if (existingLoginOptional.isPresent()) {
             return ResponseEntity.badRequest().body(existingLoginOptional.get());
         }
-
         Login i = loginRepository.save(login);
+//        roles.setUsers(login.getUserid());
+//    	if(login.getAdmin()==1) {
+//    		roles.setRole("admin");
+//    	}
+//    	else {
+//    		roles.setRole("user");
+//    	}
+        
         return new ResponseEntity<Login>(i, HttpStatus.CREATED);
     }
     String perotp;
@@ -82,10 +96,14 @@ public class LoginController {
     
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Optional<Login>> validateUserid(@PathVariable("userId") String userId) {
+    public ResponseEntity<UserTokenResponse> validateUserid(@PathVariable("userId") String userId) {
         Optional<Login> user = loginRepository.findByUserid(userId);
+        
         if (user.isPresent()) {
-            return new ResponseEntity<>(user,HttpStatus.OK);
+       
+        	String token = jwtTokenUtil.generateToken(user);
+        	UserTokenResponse response = new UserTokenResponse(token, user);
+            return new ResponseEntity<>(response,HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
