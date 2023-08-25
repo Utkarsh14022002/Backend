@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,6 +63,20 @@ public class AccountController {
 		}else {
 			return ResponseEntity.notFound().build();
 			
+		}
+	}
+	
+	
+	
+	@DeleteMapping("/deleteAccount/{account_no}")
+	public ResponseEntity<String> deleteByAccountNo(@PathVariable("account_no") long accountNo) {
+		Optional<Account> accountOptional = accountRepository.findById(accountNo);
+		if(accountOptional.isPresent()) {
+			Account account = accountOptional.get();
+			accountRepository.delete(account);
+			return ResponseEntity.ok("Account deleted successfully.");
+		}else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account not found");
 		}
 	}
 	
@@ -123,6 +138,32 @@ public class AccountController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+	
+	@PutMapping("/updateSuspend/{account_no}")
+	public ResponseEntity<Account> updateAccountSuspend(@PathVariable("account_no") long accountNo, @RequestBody Account updatedAccount){
+		Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
+		if(existingAccountOptional.isPresent()) {
+			Account existingAccount = existingAccountOptional.get();
+			existingAccount.setSuspend(1);
+			Account updated = accountRepository.save(existingAccount);
+			return new ResponseEntity<>(updated, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping("/updateSuspendDeactive/{account_no}")
+	public ResponseEntity<Account> updateAccountSuspendDeactive(@PathVariable("account_no") long accountNo, @RequestBody Account updatedAccount){
+		Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
+		if(existingAccountOptional.isPresent()) {
+			Account existingAccount = existingAccountOptional.get();
+			existingAccount.setSuspend(0);
+			Account updated = accountRepository.save(existingAccount);
+			return new ResponseEntity<>(updated, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	
     
 

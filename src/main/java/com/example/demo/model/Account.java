@@ -92,6 +92,8 @@ public class Account {
 	@NotNull(message="Permanent address may not be null")
 	@Column(name="permanent_address")
 	private String permanentAddress;
+	@Column(name="suspend")
+	private int suspend;
 	
 
 
