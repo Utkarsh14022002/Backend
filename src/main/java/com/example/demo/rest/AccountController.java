@@ -81,8 +81,29 @@ public class AccountController {
 	}
 	
 	@GetMapping("/user/{userId}")
-	public List<Account> getAccountsByUserId(@PathVariable("userId") String userId){
-		return accountRepository.findByLoginUserid(userId);
+	public ResponseEntity<List<Account>> getAccountsByUserId(@PathVariable("userId") String userId, @RequestHeader("Authorization") String header){
+		String token = header.replace("Bearer ","");
+		String usernameFromToken = jwtTokenUtil.getUsernameFromToken(token);
+		if(usernameFromToken.equals(userId))
+		{
+			return ResponseEntity.ok(accountRepository.findByLoginUserid(userId));
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+	}
+	
+	@GetMapping("/admin/{adminUserId}/user/{userId}")
+	public ResponseEntity<List<Account>> getAccountsByUserId(@PathVariable("adminUserId") String adminUserId,@PathVariable("userId") String userId, @RequestHeader("Authorization") String header){
+		String token = header.replace("Bearer ","");
+		String usernameFromToken = jwtTokenUtil.getUsernameFromToken(token);
+		if(usernameFromToken.equals(adminUserId))
+		{
+			return ResponseEntity.ok(accountRepository.findByLoginUserid(userId));
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -111,57 +132,102 @@ public class AccountController {
 	
 	
 	@PutMapping("/{accountNo}")
-    public ResponseEntity<Account> updateAccountPin(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount) {
+    public ResponseEntity<Account> updateAccountPin(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount,@RequestHeader("Authorization") String header) {
+		String token = header.replace("Bearer ","");
+		String usernameFromToken =jwtTokenUtil.getUsernameFromToken(token);
         Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
         if (existingAccountOptional.isPresent()) {
             Account existingAccount = existingAccountOptional.get();
-            System.out.println(updatedAccount.getBalance());
-            existingAccount.setBalance(updatedAccount.getBalance());
-            System.out.println(existingAccount);
-            Account updated = accountRepository.save(existingAccount);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            Login login = existingAccount.getLogin();
+            String userId = login.getUserid();
+            if(usernameFromToken.equals(userId))
+            {
+            	  System.out.println(updatedAccount.getBalance());
+                  existingAccount.setBalance(updatedAccount.getBalance());
+                  System.out.println(existingAccount);
+                  Account updated = accountRepository.save(existingAccount);
+                  return ResponseEntity.ok(updated);
+            }
+            else {
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+          
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 	@PutMapping("/accbalance/{accountNo}")
-    public ResponseEntity<Account> updateAcocuntBalance(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount) {
-        Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
+    public ResponseEntity<Account> updateAcocuntBalance(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount,@RequestHeader("Authorization") String header) {
+		String token = header.replace("Bearer ","");
+		String usernameFromToken =jwtTokenUtil.getUsernameFromToken(token);
+		Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
         if (existingAccountOptional.isPresent()) {
             Account existingAccount = existingAccountOptional.get();
-
-            existingAccount.setBalance(updatedAccount.getBalance());
+            Login login = existingAccount.getLogin();
+            String userId = login.getUserid();
+            if(usernameFromToken.equals(userId))
+            {
+            	existingAccount.setBalance(updatedAccount.getBalance());       
+                Account updated = accountRepository.save(existingAccount);
+                return ResponseEntity.ok(updated);
+            }
+            else {
+            	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
             
-            Account updated = accountRepository.save(existingAccount);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 	
-	@PutMapping("/updateSuspend/{account_no}")
-	public ResponseEntity<Account> updateAccountSuspend(@PathVariable("account_no") long accountNo, @RequestBody Account updatedAccount){
+	@PutMapping("/admin/{adminUserId}/updateSuspend/{account_no}")
+	public ResponseEntity<Account> updateAccountSuspend(@PathVariable("adminUserId") String adminUserId,@PathVariable("account_no") long accountNo, @RequestBody Account updatedAccount, @RequestHeader("Authorization") String header){
+		String token = header.replace("Bearer ","");
+		String usernameFromToken =jwtTokenUtil.getUsernameFromToken(token);
 		Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
 		if(existingAccountOptional.isPresent()) {
 			Account existingAccount = existingAccountOptional.get();
-			existingAccount.setSuspend(1);
-			Account updated = accountRepository.save(existingAccount);
-			return new ResponseEntity<>(updated, HttpStatus.OK);
+//			long adminUserId1 = adminUserId;
+//			long adminUserId2 = adminUserId;
+			System.out.println("----------------------------------------");
+			System.out.println(adminUserId);
+			System.out.println(usernameFromToken);
+			System.out.println("---------------------------------------");
+			if(usernameFromToken.equals(adminUserId))
+			{
+				existingAccount.setSuspend(1);
+				Account updated = accountRepository.save(existingAccount);
+				return ResponseEntity.ok(updated);
+			}
+			else {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			}
+		
 		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}
 	}
 	
-	@PutMapping("/updateSuspendDeactive/{account_no}")
-	public ResponseEntity<Account> updateAccountSuspendDeactive(@PathVariable("account_no") long accountNo, @RequestBody Account updatedAccount){
+	@PutMapping("/admin/{adminUserId}/updateSuspendDeactive/{account_no}")
+	public ResponseEntity<Account> updateAccountSuspendDeactive(@PathVariable("adminUserId") String adminUserId,@PathVariable("account_no") long accountNo, @RequestBody Account updatedAccount, @RequestHeader("Authorization") String header){
+		String token = header.replace("Bearer ","");
+		String usernameFromToken =jwtTokenUtil.getUsernameFromToken(token);
 		Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
 		if(existingAccountOptional.isPresent()) {
 			Account existingAccount = existingAccountOptional.get();
-			existingAccount.setSuspend(0);
-			Account updated = accountRepository.save(existingAccount);
-			return new ResponseEntity<>(updated, HttpStatus.OK);
+			if(usernameFromToken.equals(adminUserId))
+			{
+				existingAccount.setSuspend(0);
+				Account updated = accountRepository.save(existingAccount);
+				return ResponseEntity.ok(updated);	
+			}
+			else 
+			{
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			}
+			
 		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}
 	}
 	
