@@ -53,13 +53,22 @@ public class AccountController {
 	}
 	
 	@PostMapping("/{userId}") 
-	public ResponseEntity<String> addAccountForUserId(@PathVariable String userId,@RequestBody Account account){
+	public ResponseEntity<String> addAccountForUserId(@PathVariable String userId,@RequestBody Account account, @RequestHeader("Authorization") String header){
+		String token = header.replace("Bearer ","");
+		String usernameFromToken = jwtTokenUtil.getUsernameFromToken(token);
 		Optional<Login> userOptional = loginRepository.findByUserid(userId);
 		if (userOptional.isPresent()) {
-			Login user = userOptional.get();
-			account.setUserIdFromLogin(user);
-			accountRepository.save(account);
-			return ResponseEntity.ok("Account added successfully");
+			if(usernameFromToken.equals(userId))
+			{
+				Login user = userOptional.get();
+				account.setUserIdFromLogin(user);
+				accountRepository.save(account);
+				return ResponseEntity.ok("Account added successfully");
+			}
+			else {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			}
+			
 		}else {
 			return ResponseEntity.notFound().build();
 			
@@ -131,8 +140,9 @@ public class AccountController {
 	}
 	
 	
-	@PutMapping("/{accountNo}")
+	@PutMapping("/transpin/{accountNo}")
     public ResponseEntity<Account> updateAccountPin(@PathVariable("accountNo") long accountNo, @RequestBody Account updatedAccount,@RequestHeader("Authorization") String header) {
+		System.out.println("--------------------------------");
 		String token = header.replace("Bearer ","");
 		String usernameFromToken =jwtTokenUtil.getUsernameFromToken(token);
         Optional<Account> existingAccountOptional = accountRepository.findByAccountNo(accountNo);
@@ -140,10 +150,12 @@ public class AccountController {
             Account existingAccount = existingAccountOptional.get();
             Login login = existingAccount.getLogin();
             String userId = login.getUserid();
+            System.out.println(userId);
+            System.out.println(usernameFromToken);
             if(usernameFromToken.equals(userId))
             {
-            	  System.out.println(updatedAccount.getBalance());
-                  existingAccount.setBalance(updatedAccount.getBalance());
+            	  System.out.println(updatedAccount.getTransactionpin());
+                  existingAccount.setTransactionpin(updatedAccount.getTransactionpin());
                   System.out.println(existingAccount);
                   Account updated = accountRepository.save(existingAccount);
                   return ResponseEntity.ok(updated);
