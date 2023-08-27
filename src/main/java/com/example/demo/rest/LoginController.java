@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -24,10 +23,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.example.demo.model.Login;
 //import com.example.demo.model.Role;
 import com.example.demo.model.UserTokenResponse;
-import com.example.demo.model.Account;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.LoginRepository;
-import com.example.demo.util.JwtResponse;
 import com.example.demo.util.JwtTokenUtil;
 @EnableWebMvc
 @RestController
@@ -100,12 +97,26 @@ public class LoginController {
         Optional<Login> user = loginRepository.findByUserid(userId);
         
         if (user.isPresent()) {
-       
+    
         	String token = jwtTokenUtil.generateToken(user);
         	UserTokenResponse response = new UserTokenResponse(token, user);
-            return new ResponseEntity<>(response,HttpStatus.OK);
+            return ResponseEntity.ok(response);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/admin/{userId}")
+    public ResponseEntity<UserTokenResponse> validateAdminUserid(@PathVariable("userId") String userId) {
+        Optional<Login> user = loginRepository.findByUserid(userId);
+        
+        if (user.isPresent()) {
+    
+        	String token = jwtTokenUtil.generateToken(user);
+        	UserTokenResponse response = new UserTokenResponse(token, user);
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -228,9 +239,18 @@ public class LoginController {
 //    	
 //    }
     
-    @GetMapping("/users")
-    public List<Login> validateUserId(){
-    	return loginRepository.findAll();
+    @GetMapping("/admin/{userid}/users")
+    public ResponseEntity<List<Login>> validateUserId(@PathVariable("userid") String userid, @RequestHeader("Authorization") String header){
+    	String token = header.replace("Bearer ","");
+		String usernameFromToken = jwtTokenUtil.getUsernameFromToken(token);
+		if(usernameFromToken.equals(userid))
+		{
+			return ResponseEntity.ok(loginRepository.findAll());
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+    	
     }
     
     @GetMapping("/{userid}")
